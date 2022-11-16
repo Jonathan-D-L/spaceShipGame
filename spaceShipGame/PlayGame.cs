@@ -15,31 +15,30 @@ namespace spaceShipGame
             imgSpaceShip.MaxWidth(1);
             var enemy = new CanvasImage("images\\enemy.png");
             enemy.MaxWidth(1);
+            var enemySpaceShip = new EnemySpaceShip();
+            int enemyDifficutly = 0;
+            var enemySpaceShips = enemySpaceShip.AddEnemies(enemyDifficutly);
 
             bool newLine = false;
             var spaceShip = imgSpaceShip;
             var moveX = "                                                      ";
             var moveY = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
-            var enemyPosX = string.Empty;
+            var enemyPosX = "";
             var scoreCount = 0;
             var score = $"score: {scoreCount}";
-            var rand = new Random();
-            int j = rand.Next(1, 50);
-            for (int i = 0; i < j; i++)
-            {
-                enemyPosX += "  ";
-            }
+
             Console.CursorVisible = false;
+
             Console.WriteLine(score);
-            Console.Write($"{enemyPosX}");
-            AnsiConsole.Write(enemy);
+            enemySpaceShip.SpawnEnemies();
             Console.Write($"{moveY}{moveX}");
             AnsiConsole.Write(spaceShip);
+
             while (true)
             {
 
                 var action = Console.ReadKey().KeyChar;
-                if (action == 'w')
+                if (action == 'w' && moveY.Length >= 6)
                 {
                     try
                     {
@@ -50,7 +49,7 @@ namespace spaceShipGame
 
                     }
                 }
-                if (action == 'a')
+                if (action == 'a' && moveX.Length >= 10)
                 {
                     try
                     {
@@ -96,8 +95,8 @@ namespace spaceShipGame
                         {
                             Console.Clear();
                             Console.WriteLine(score);
-                            Console.Write($"{enemyPosX}");
-                            AnsiConsole.Write(enemy);
+                            enemySpaceShip.SpawnEnemies();
+                            Console.Write($"{moveY}{moveX}");
                             Console.Write($"{shotPosY}{shotPosX}{shot}");
                             Console.Write($"{shipPosY}{moveX}");
                             AnsiConsole.Write(spaceShip);
@@ -115,16 +114,10 @@ namespace spaceShipGame
                         scoreCount++;
                         score = $"score: {scoreCount}";
                         enemyPosX = string.Empty;
-                        j = rand.Next(1, 50);
-                        for (int i = 0; i < j; i++)
-                        {
-                            enemyPosX += "  ";
-                        }
                     }
                     Console.Clear();
                     Console.WriteLine(score);
-                    Console.Write($"{enemyPosX}");
-                    AnsiConsole.Write(enemy);
+                    enemySpaceShip.SpawnEnemies();
                     Console.Write($"{moveY}{moveX}");
                     AnsiConsole.Write(spaceShip);
 
@@ -133,8 +126,7 @@ namespace spaceShipGame
                 {
                     Console.Clear();
                     Console.WriteLine(score);
-                    Console.Write($"{enemyPosX}");
-                    AnsiConsole.Write(enemy);
+                    enemySpaceShip.SpawnEnemies();
                     Console.Write($"{moveY}{moveX}");
                     AnsiConsole.Write(spaceShip);
                 }
