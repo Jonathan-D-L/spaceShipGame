@@ -44,7 +44,7 @@ namespace spaceShipGame
                     var pos = rand.Next(1, 50);
                     if (!enemySpaceShips.Where(s => s.Equals(pos)).Any())
                     {
-                        var enemy = new EnemySpaceShip(_enemy = 1, _posX = pos);
+                        var enemy = new EnemySpaceShip(_enemy, _posX = pos);
                         enemySpaceShips.Add(enemy);
                     }
                 }
@@ -52,8 +52,8 @@ namespace spaceShipGame
             else if (enemySpaceShips.Count == 0)
             {
                 var pos = rand.Next(1, 50);
-                var enemy = new EnemySpaceShip(_enemy = 1, _posX = pos);
-                var enemy1 = new EnemySpaceShip(_enemy = 1, _posX = pos);
+                var enemy = new EnemySpaceShip(_enemy, _posX = pos);
+                var enemy1 = new EnemySpaceShip(_enemy, _posX = pos);
                 enemySpaceShips.Add(enemy);
                 enemySpaceShips.Add(enemy1);
             }
