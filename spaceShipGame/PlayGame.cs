@@ -16,7 +16,7 @@ namespace spaceShipGame
             var enemy = new CanvasImage("images\\enemy.png");
             enemy.MaxWidth(1);
             var enemySpaceShip = new EnemySpaceShip();
-            int enemyDifficutly = 0;
+            int enemyDifficutly = 1;
             enemySpaceShip.AddEnemies(enemyDifficutly);
             var spaceShip = imgSpaceShip;
             var moveX = "                                                      ";
@@ -99,9 +99,8 @@ namespace spaceShipGame
                             AnsiConsole.Write(spaceShip);
                             shipPosY += "\r\n\r\n";
                             shotPosY = shotPosY.Remove(shotPosY.Length - 4);
-                            scoreCount++;
-                            score = $"score: {scoreCount}";
                             scoreCount = enemySpaceShip.EnemyKilled(shotPosX, scoreCount);
+                            score = $"score: {scoreCount}";
                         }
                         catch
                         {

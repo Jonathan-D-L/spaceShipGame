@@ -33,24 +33,19 @@ namespace spaceShipGame
         }
 
 
-        public List<EnemySpaceShip> AddEnemies(int enemyDifficutly)
+        public List<EnemySpaceShip> AddEnemies(int scoreCount)
         {
-
             var rand = new Random();
-            if (enemyDifficutly > 1)
+            if (scoreCount > 1)
             {
-                enemyDifficutly++;
-                for (int i = 0; i < enemyDifficutly; i++)
+
+                for (int i = 0; i < scoreCount; i++)
                 {
                     var pos = rand.Next(1, 50);
                     var enemy = new EnemySpaceShip(_enemy, _posX = pos);
                     enemySpaceShips.Add(enemy);
                 }
-                var firstEnemy = enemySpaceShips.Select(e => e.posX).First();
-                if (firstEnemy < 5)
-                {
-                    enemySpaceShips.First(e => e.posX == 5);
-                }
+
             }
             else if (enemySpaceShips.Count == 0)
             {
@@ -75,13 +70,25 @@ namespace spaceShipGame
                 if (enemySpaceShips.Count > 1)
                 {
 
-                    if (spacing >= 50)
+                    if (spacing >= 40)
                     {
                         enemyShip.posX /= enemySpaceShips.Count;
+                        for (int i = 0; i < enemyShip.posX; i++)
+                        {
+                            enemyPosX += "  ";
+                        }
+                        var firstEnemy = enemySpaceShips.Select(e => e.posX).First();
+                        if (firstEnemy < 5)
+                        {
+                            
+                        }
                     }
-                    for (int i = 0; i <= enemyShip.posX; i++)
+                    else
                     {
-                        enemyPosX += "  ";
+                        for (int i = 0; i <= enemyShip.posX; i++)
+                        {
+                            enemyPosX += "  ";
+                        }
                     }
                 }
                 else if (enemySpaceShips.Count == 1)
@@ -108,9 +115,9 @@ namespace spaceShipGame
                 {
                     enemySpaceShips.Remove(ship);
                     scoreCount++;
+                    AddEnemies(scoreCount);
+                    return scoreCount;
                 }
-                shotPos = ship.posX;
-                AddEnemies(scoreCount);
             }
             return scoreCount;
         }
