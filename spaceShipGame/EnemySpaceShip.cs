@@ -37,8 +37,14 @@ namespace spaceShipGame
         {
 
             var rand = new Random();
-            var enemiesSpawned = enemySpaceShips.Count + 1;
-            if (scoreCount > 1)
+            var enemiesSpawned = enemySpaceShips.Count;
+            if (enemySpaceShips.Count == 0)
+            {
+                var pos = rand.Next(5, 25);
+                var enemy = new EnemySpaceShip(id = 1, posX = pos);
+                enemySpaceShips.Add(enemy);
+            }
+            else
             {
                 for (int i = 0; i <= enemiesSpawned; i++)
                 {
@@ -47,12 +53,6 @@ namespace spaceShipGame
                     enemySpaceShips.Add(enemy);
                 }
 
-            }
-            else if (enemySpaceShips.Count == 0)
-            {
-                var pos = rand.Next(5, 25);
-                var enemy = new EnemySpaceShip(id = 1, posX = pos);
-                enemySpaceShips.Add(enemy);
             }
 
             return enemySpaceShips;
@@ -66,10 +66,10 @@ namespace spaceShipGame
             var totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
             if (totalShipSpacing >= (23 - enemySpaceShips.Count))
             {
-                
-                var maxSpace =  (totalShipSpacing * enemySpaceShips.Count) / totalShipSpacing;
+
+                var maxSpace = totalShipSpacing / (enemySpaceShips.Count + 1);
                 var rand = new Random();
-                var newPosFirst = rand.Next(8, maxSpace + 8);
+                var newPosFirst = rand.Next(5, maxSpace +5);
                 var newPosTrailing = rand.Next(1, maxSpace);
                 foreach (var enemyShip in enemySpaceShips)
                 {
@@ -77,11 +77,11 @@ namespace spaceShipGame
                     {
                         if (enemyShip.Equals(enemySpaceShips.First()))
                         {
-                            enemySpaceShips.Select(x => x).First().posX = newPosFirst;
+                            enemyShip.posX = newPosFirst;
                         }
                         else
                         {
-                            enemySpaceShips.Find(x => x.id == enemyShip.id).posX = -8 + newPosTrailing;
+                            enemyShip.posX = newPosTrailing;
                         }
                     }
                     else
@@ -103,6 +103,7 @@ namespace spaceShipGame
             var posCursor = 0;
             foreach (var enemyShip in enemySpaceShips)
             {
+                enemyPosX = string.Empty;
                 for (int i = 0; i <= enemyShip.posX; i++)
                 {
                     enemyPosX += "  ";
@@ -121,9 +122,9 @@ namespace spaceShipGame
                 var shotPos = shotPosX.Length - ship.posX - 2;
                 if (ship.posX == shotPos)
                 {
-                    enemySpaceShips.Remove(ship);
                     scoreCount++;
                     AddEnemies(scoreCount);
+                    enemySpaceShips.Remove(ship);
                     return scoreCount;
                 }
             }
