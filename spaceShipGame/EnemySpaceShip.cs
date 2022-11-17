@@ -14,17 +14,17 @@ namespace spaceShipGame
         {
         }
         List<EnemySpaceShip> enemySpaceShips = new();
-        private int _enemy { get; set; }
+        private int _id { get; set; }
         private int _posX { get; set; }
         public EnemySpaceShip(int enemy, int posX)
         {
             _posX = posX;
-            _enemy = enemy;
+            _id = enemy;
         }
         public int enemy
         {
-            get { return _enemy; }
-            set { _enemy = value; }
+            get { return _id; }
+            set { _id = value; }
         }
         public int posX
         {
@@ -35,22 +35,23 @@ namespace spaceShipGame
 
         public List<EnemySpaceShip> AddEnemies(int scoreCount)
         {
+            
             var rand = new Random();
             if (scoreCount > 1)
             {
 
-                for (int i = 0; i < scoreCount; i++)
+                for (int i = 0; i <= scoreCount + 1; i++)
                 {
-                    var pos = rand.Next(1, 50);
-                    var enemy = new EnemySpaceShip(_enemy, _posX = pos);
+                    var pos = rand.Next(1, 25);
+                    var enemy = new EnemySpaceShip(++_id, _posX = pos);
                     enemySpaceShips.Add(enemy);
                 }
 
             }
             else if (enemySpaceShips.Count == 0)
             {
-                var pos = rand.Next(1, 50);
-                var enemy = new EnemySpaceShip(_enemy, _posX = pos);
+                var pos = rand.Next(5, 25);
+                var enemy = new EnemySpaceShip(_id = 1, _posX = pos);
                 enemySpaceShips.Add(enemy);
             }
             return enemySpaceShips;
@@ -59,65 +60,59 @@ namespace spaceShipGame
         {
             var enemy = new CanvasImage("images\\enemy.png");
             string enemyPosX = string.Empty;
-            var spacing = 0;
-
-            foreach (var enemyShip in enemySpaceShips)
+            List<int> allShipSpacings = new();
+            allShipSpacings = enemySpaceShips.Select(s => s.posX).ToList();
+            var totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
+            while (totalShipSpacing > (25 - enemySpaceShips.Count))
             {
-                if (enemySpaceShips.Count > 1)
-                {
-                    if (spacing > 50 - enemySpaceShips.Count)
-                    {
 
-                        while (spacing > 50 - enemySpaceShips.Count)
+                foreach (var enemyShip in enemySpaceShips)
+                {
+                    if (totalShipSpacing > (25 - enemySpaceShips.Count))
+                    {
+                        if (enemyShip.Equals(enemySpaceShips.First()))
                         {
-                            var enemySpacing = new List<int>();
-                            enemySpacing = enemySpaceShips.Select(s => s.posX).ToList();
-                            var firstShip = enemySpaceShips[0];
-                            foreach (var space in enemySpacing)
-                            {
-                                spacing += space;
-                            }
-                            foreach (var enemyPos in enemySpaceShips)
-                            {
-                                if (firstShip.posX < 5)
-                                {
-                                    firstShip.posX = 5;
-                                }
-                                else
-                                {
-                                    enemyShip.posX /= enemySpaceShips.Count;
-                                }
-                            }
+                            enemySpaceShips.Select(x => x).First().posX = 5;
+                        }
+                        else
+                        {
+                            enemySpaceShips.Find(x=>x._id == enemyShip._id).posX = enemyShip.posX /= enemySpaceShips.Count;
                         }
                     }
                     else
                     {
-                        for (int i = 0; i <= enemyShip.posX; i++)
+                        if (enemyShip.Equals(enemySpaceShips.First()))
                         {
-                            enemyPosX += "  ";
+                            enemySpaceShips.Select(x => x).First().posX = 5;
+                        }
+                        else
+                        {
+                            enemyShip.posX = enemyShip.posX;
                         }
                     }
                 }
-                else if (enemySpaceShips.Count == 1)
+                allShipSpacings.Clear();
+                allShipSpacings = enemySpaceShips.Select(s => s.posX).ToList();
+                totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
+            }
+
+            foreach (var enemyShip in enemySpaceShips)
+            {
+                for (int i = 0; i <= enemyShip.posX; i++)
                 {
-                    for (int i = 0; i <= enemyShip.posX; i++)
-                    {
-                        enemyPosX += "  ";
-                    }
+                    enemyPosX += "  ";
                 }
                 Console.Write($"{enemyPosX}");
                 AnsiConsole.Write(enemy);
                 int top = Console.CursorTop;
                 Console.SetCursorPosition(enemyPosX.Length + 2, Console.CursorTop - top + 1);
             }
-
-
         }
         public int EnemyKilled(string shotPosX, int scoreCount)
         {
             foreach (var ship in enemySpaceShips)
             {
-                var shotPos = shotPosX.Length - ship.posX -2;
+                var shotPos = shotPosX.Length - ship.posX - 2;
                 if (ship.posX == shotPos)
                 {
                     enemySpaceShips.Remove(ship);
