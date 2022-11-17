@@ -60,27 +60,34 @@ namespace spaceShipGame
             var enemy = new CanvasImage("images\\enemy.png");
             string enemyPosX = string.Empty;
             var spacing = 0;
-            var enemySpacing = enemySpaceShips.Select(s => s.posX).ToList();
-            foreach (var e in enemySpacing)
-            {
-                spacing += e;
-            }
+
             foreach (var enemyShip in enemySpaceShips)
             {
                 if (enemySpaceShips.Count > 1)
                 {
-
-                    if (spacing >= 40)
+                    if (spacing > 50 - enemySpaceShips.Count)
                     {
-                        enemyShip.posX /= enemySpaceShips.Count;
-                        for (int i = 0; i < enemyShip.posX; i++)
+
+                        while (spacing > 50 - enemySpaceShips.Count)
                         {
-                            enemyPosX += "  ";
-                        }
-                        var firstEnemy = enemySpaceShips.Select(e => e.posX).First();
-                        if (firstEnemy < 5)
-                        {
-                            
+                            var enemySpacing = new List<int>();
+                            enemySpacing = enemySpaceShips.Select(s => s.posX).ToList();
+                            var firstShip = enemySpaceShips[0];
+                            foreach (var space in enemySpacing)
+                            {
+                                spacing += space;
+                            }
+                            foreach (var enemyPos in enemySpaceShips)
+                            {
+                                if (firstShip.posX < 5)
+                                {
+                                    firstShip.posX = 5;
+                                }
+                                else
+                                {
+                                    enemyShip.posX /= enemySpaceShips.Count;
+                                }
+                            }
                         }
                     }
                     else
