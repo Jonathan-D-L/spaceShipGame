@@ -40,7 +40,7 @@ namespace spaceShipGame
             if (scoreCount > 1)
             {
 
-                for (int i = 0; i <= scoreCount + 1; i++)
+                for (int i = 0; i <= scoreCount; i++)
                 {
                     var pos = rand.Next(1, 25);
                     var enemy = new EnemySpaceShip(++id, posX = pos);
@@ -63,20 +63,22 @@ namespace spaceShipGame
             List<int> allShipSpacings = new();
             allShipSpacings = enemySpaceShips.Select(s => s.posX).ToList();
             var totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
-            while (totalShipSpacing > (25 - enemySpaceShips.Count))
+            while (totalShipSpacing > (24 - enemySpaceShips.Count))
             {
-
+                var rand = new Random();
+                var newPosFirst = rand.Next(6, 10);
+                var newPosTrailing = rand.Next(1, 10);
                 foreach (var enemyShip in enemySpaceShips)
                 {
-                    if (totalShipSpacing > (25 - enemySpaceShips.Count))
+                    if (totalShipSpacing > (24 - enemySpaceShips.Count))
                     {
                         if (enemyShip.Equals(enemySpaceShips.First()))
                         {
-                            enemySpaceShips.Select(x => x).First().posX = 5;
+                            enemySpaceShips.Select(x => x).First().posX = newPosFirst;
                         }
                         else
                         {
-                            enemySpaceShips.Find(x=>x.id == enemyShip.id).posX = enemyShip.posX /= enemySpaceShips.Count;
+                            enemySpaceShips.Find(x=>x.id == enemyShip.id).posX = 0 + newPosTrailing;
                         }
                     }
                     else
@@ -95,17 +97,18 @@ namespace spaceShipGame
                 allShipSpacings = enemySpaceShips.Select(s => s.posX).ToList();
                 totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
             }
-
+            var posCursor = 0;
             foreach (var enemyShip in enemySpaceShips)
             {
                 for (int i = 0; i <= enemyShip.posX; i++)
                 {
                     enemyPosX += "  ";
                 }
+                posCursor += enemyPosX.Length + 2;
                 Console.Write($"{enemyPosX}");
                 AnsiConsole.Write(enemy);
                 int top = Console.CursorTop;
-                Console.SetCursorPosition(enemyPosX.Length + 2, Console.CursorTop - top + 1);
+                Console.SetCursorPosition(posCursor, Console.CursorTop - top + 1);
             }
         }
         public int EnemyKilled(string shotPosX, int scoreCount)

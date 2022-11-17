@@ -99,8 +99,6 @@ namespace spaceShipGame
                             AnsiConsole.Write(spaceShip);
                             shipPosY += "\r\n\r\n";
                             shotPosY = shotPosY.Remove(shotPosY.Length - 4);
-                            scoreCount = enemySpaceShip.EnemyKilled(shotPosX, scoreCount);
-                            score = $"score: {scoreCount}";
                         }
                         catch
                         {
@@ -108,6 +106,8 @@ namespace spaceShipGame
                             shotPosX = moveX;
                         }
                     }
+                    scoreCount = enemySpaceShip.EnemyKilled(shotPosX, scoreCount);
+                    score = $"score: {scoreCount}";
                     Console.Clear();
                     Console.WriteLine(score);
                     enemySpaceShip.SpawnEnemies();
