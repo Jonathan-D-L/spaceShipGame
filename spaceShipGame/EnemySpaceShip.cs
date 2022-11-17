@@ -16,12 +16,12 @@ namespace spaceShipGame
         List<EnemySpaceShip> enemySpaceShips = new();
         private int _id { get; set; }
         private int _posX { get; set; }
-        public EnemySpaceShip(int enemy, int posX)
+        private EnemySpaceShip(int id, int posX)
         {
             _posX = posX;
-            _id = enemy;
+            _id = id;
         }
-        public int enemy
+        public int id
         {
             get { return _id; }
             set { _id = value; }
@@ -43,7 +43,7 @@ namespace spaceShipGame
                 for (int i = 0; i <= scoreCount + 1; i++)
                 {
                     var pos = rand.Next(1, 25);
-                    var enemy = new EnemySpaceShip(++_id, _posX = pos);
+                    var enemy = new EnemySpaceShip(++id, posX = pos);
                     enemySpaceShips.Add(enemy);
                 }
 
@@ -51,7 +51,7 @@ namespace spaceShipGame
             else if (enemySpaceShips.Count == 0)
             {
                 var pos = rand.Next(5, 25);
-                var enemy = new EnemySpaceShip(_id = 1, _posX = pos);
+                var enemy = new EnemySpaceShip(id = 1, posX = pos);
                 enemySpaceShips.Add(enemy);
             }
             return enemySpaceShips;
@@ -76,7 +76,7 @@ namespace spaceShipGame
                         }
                         else
                         {
-                            enemySpaceShips.Find(x=>x._id == enemyShip._id).posX = enemyShip.posX /= enemySpaceShips.Count;
+                            enemySpaceShips.Find(x=>x.id == enemyShip.id).posX = enemyShip.posX /= enemySpaceShips.Count;
                         }
                     }
                     else
