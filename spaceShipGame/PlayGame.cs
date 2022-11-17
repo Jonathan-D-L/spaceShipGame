@@ -21,7 +21,6 @@ namespace spaceShipGame
             var spaceShip = imgSpaceShip;
             var moveX = "                                                      ";
             var moveY = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
-            var enemyPosX = "";
             var scoreCount = 0;
             var score = $"score: {scoreCount}";
 
@@ -31,11 +30,17 @@ namespace spaceShipGame
             enemySpaceShip.SpawnEnemies();
             Console.Write($"{moveY}{moveX}");
             AnsiConsole.Write(spaceShip);
-
+            var action = '0';
             while (true)
             {
-
-                var action = Console.ReadKey().KeyChar;
+                bool wait = true;
+                while (wait)
+                {
+                    while (Console.KeyAvailable) Console.ReadKey(true);
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    action = key.KeyChar;
+                    wait = false;
+                }
                 if (action == 'w' && moveY.Length >= 6)
                 {
                     try
@@ -94,18 +99,15 @@ namespace spaceShipGame
                             AnsiConsole.Write(spaceShip);
                             shipPosY += "\r\n\r\n";
                             shotPosY = shotPosY.Remove(shotPosY.Length - 4);
+                            scoreCount++;
+                            score = $"score: {scoreCount}";
+                            scoreCount = enemySpaceShip.EnemyKilled(shotPosX, scoreCount);
                         }
                         catch
                         {
                             shotMoving = false;
                             shotPosX = moveX;
                         }
-                    }
-                    if (shotPosX == enemyPosX)
-                    {
-                        scoreCount++;
-                        score = $"score: {scoreCount}";
-                        enemyPosX = string.Empty;
                     }
                     Console.Clear();
                     Console.WriteLine(score);

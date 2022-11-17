@@ -35,27 +35,28 @@ namespace spaceShipGame
 
         public List<EnemySpaceShip> AddEnemies(int enemyDifficutly)
         {
-            bool setRandomShipPos = true;
+
             var rand = new Random();
-            if (enemyDifficutly >= 5)
+            if (enemyDifficutly > 1)
             {
-                while (setRandomShipPos)
+                enemyDifficutly++;
+                for (int i = 0; i < enemyDifficutly; i++)
                 {
                     var pos = rand.Next(1, 50);
-                    if (!enemySpaceShips.Where(s => s.Equals(pos)).Any())
-                    {
-                        var enemy = new EnemySpaceShip(_enemy, _posX = pos);
-                        enemySpaceShips.Add(enemy);
-                    }
+                    var enemy = new EnemySpaceShip(_enemy, _posX = pos);
+                    enemySpaceShips.Add(enemy);
+                }
+                var firstEnemy = enemySpaceShips.Select(e => e.posX).First();
+                if (firstEnemy < 5)
+                {
+                    enemySpaceShips.First(e => e.posX == 5);
                 }
             }
             else if (enemySpaceShips.Count == 0)
             {
                 var pos = rand.Next(1, 50);
                 var enemy = new EnemySpaceShip(_enemy, _posX = pos);
-                var enemy1 = new EnemySpaceShip(_enemy, _posX = pos);
                 enemySpaceShips.Add(enemy);
-                enemySpaceShips.Add(enemy1);
             }
             return enemySpaceShips;
         }
@@ -63,35 +64,31 @@ namespace spaceShipGame
         {
             var enemy = new CanvasImage("images\\enemy.png");
             string enemyPosX = string.Empty;
-            bool firstShip = true;
+            var spacing = 0;
+            var enemySpacing = enemySpaceShips.Select(s => s.posX).ToList();
+            foreach (var e in enemySpacing)
+            {
+                spacing += e;
+            }
             foreach (var enemyShip in enemySpaceShips)
             {
                 if (enemySpaceShips.Count > 1)
                 {
-                    for (int i = 0; i <= enemyShip.posX / (enemySpaceShips.Count * enemySpaceShips.Count); i++)
+
+                    if (spacing >= 50)
+                    {
+                        enemyShip.posX /= enemySpaceShips.Count;
+                    }
+                    for (int i = 0; i <= enemyShip.posX; i++)
                     {
                         enemyPosX += "  ";
-
-                    }
-                    if (firstShip == true)
-                    {
-                        if (enemyPosX.Length <= 10)
-                        {
-                            int startPos = 5 - enemyPosX.Length;
-                            for (int i = 0; i <= startPos; i++)
-                            {
-                                enemyPosX += "  ";
-                            }
-                        }
-                        firstShip = false;
                     }
                 }
-                else
+                else if (enemySpaceShips.Count == 1)
                 {
                     for (int i = 0; i <= enemyShip.posX; i++)
                     {
                         enemyPosX += "  ";
-
                     }
                 }
                 Console.Write($"{enemyPosX}");
@@ -99,9 +96,23 @@ namespace spaceShipGame
                 int top = Console.CursorTop;
                 Console.SetCursorPosition(enemyPosX.Length + 2, Console.CursorTop - top + 1);
             }
-            Console.SetCursorPosition(default, default);
 
 
+        }
+        public int EnemyKilled(string shotPosX, int scoreCount)
+        {
+            foreach (var ship in enemySpaceShips)
+            {
+                var shotPos = shotPosX.Length - ship.posX -2;
+                if (ship.posX == shotPos)
+                {
+                    enemySpaceShips.Remove(ship);
+                    scoreCount++;
+                }
+                shotPos = ship.posX;
+                AddEnemies(scoreCount);
+            }
+            return scoreCount;
         }
     }
 }
