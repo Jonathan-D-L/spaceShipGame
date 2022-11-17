@@ -17,9 +17,7 @@ namespace spaceShipGame
             enemy.MaxWidth(1);
             var enemySpaceShip = new EnemySpaceShip();
             int enemyDifficutly = 0;
-            var enemySpaceShips = enemySpaceShip.AddEnemies(enemyDifficutly);
-
-            bool newLine = false;
+            enemySpaceShip.AddEnemies(enemyDifficutly);
             var spaceShip = imgSpaceShip;
             var moveX = "                                                      ";
             var moveY = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
@@ -68,11 +66,6 @@ namespace spaceShipGame
                 {
                     moveX += "  ";
                 }
-                if (newLine == true)
-                {
-                    moveY += "\r\n";
-                    newLine = false;
-                }
                 if (action == ' ')
                 {
                     var shot = "**";
@@ -96,7 +89,6 @@ namespace spaceShipGame
                             Console.Clear();
                             Console.WriteLine(score);
                             enemySpaceShip.SpawnEnemies();
-                            Console.Write($"{moveY}{moveX}");
                             Console.Write($"{shotPosY}{shotPosX}{shot}");
                             Console.Write($"{shipPosY}{moveX}");
                             AnsiConsole.Write(spaceShip);
