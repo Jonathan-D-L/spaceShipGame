@@ -37,24 +37,30 @@ namespace spaceShipGame
         {
 
             var rand = new Random();
-            var enemiesSpawned = enemySpaceShips.Count;
+
             if (enemySpaceShips.Count == 0)
             {
-                var pos = rand.Next(5, 25);
+                var pos = rand.Next(5, 50);
                 var enemy = new EnemySpaceShip(id = 1, posX = pos);
                 enemySpaceShips.Add(enemy);
             }
-            else
+            else if (enemySpaceShips.Count > 0 && enemySpaceShips.Count < 5)
             {
-                for (int i = 0; i <= enemiesSpawned; i++)
-                {
-                    var pos = rand.Next(1, 25);
-                    var enemy = new EnemySpaceShip(++id, posX = pos);
-                    enemySpaceShips.Add(enemy);
-                }
 
+                var pos = rand.Next(1, 50);
+                var enemy = new EnemySpaceShip(++id, posX = pos);
+                enemySpaceShips.Add(enemy);
             }
-
+            var renewPos = rand.Next(5, 30);
+            enemySpaceShips.First().posX = renewPos;
+            if (enemySpaceShips.Count > 1)
+            {
+                foreach (var ship in enemySpaceShips)
+                {
+                    renewPos = rand.Next(1, 20);
+                    ship.posX = renewPos;
+                }
+            }
             return enemySpaceShips;
         }
         public void SpawnEnemies()
@@ -64,16 +70,28 @@ namespace spaceShipGame
             List<int> allShipSpacings = new();
             allShipSpacings = enemySpaceShips.Select(s => s.posX).ToList();
             var totalShipSpacing = allShipSpacings.Take(allShipSpacings.Count).Sum();
-            if (totalShipSpacing >= (23 - enemySpaceShips.Count))
+            if (totalShipSpacing >= (52 - (enemySpaceShips.Count * 2)))
             {
+                var spaceShipTakesSpace = enemySpaceShips.Count * 2;
 
-                var maxSpace = totalShipSpacing / (enemySpaceShips.Count + 1);
+                var maxSpace = (totalShipSpacing - spaceShipTakesSpace - 5) / enemySpaceShips.Count;
                 var rand = new Random();
-                var newPosFirst = rand.Next(5, maxSpace +5);
-                var newPosTrailing = rand.Next(1, maxSpace);
+
                 foreach (var enemyShip in enemySpaceShips)
                 {
-                    if (totalShipSpacing > (23 - enemySpaceShips.Count))
+                    var maxSpaceTrailing = maxSpace;
+                    if (maxSpace < 1)
+                    {
+                        maxSpaceTrailing = 1;
+                    }
+                    var newPosTrailing = rand.Next(1, maxSpaceTrailing);
+                    if (maxSpace < 6)
+                    {
+                        maxSpace = 6;
+                    }
+                    var newPosFirst = rand.Next(6, maxSpace);
+
+                    if (totalShipSpacing > (52 - (enemySpaceShips.Count * 2)))
                     {
                         if (enemyShip.Equals(enemySpaceShips.First()))
                         {
@@ -88,7 +106,7 @@ namespace spaceShipGame
                     {
                         if (enemyShip.Equals(enemySpaceShips.First()))
                         {
-                            enemySpaceShips.Select(x => x).First().posX = 5;
+                            enemyShip.posX = newPosFirst;
                         }
                         else
                         {
@@ -124,7 +142,6 @@ namespace spaceShipGame
                 {
                     scoreCount++;
                     AddEnemies(scoreCount);
-                    enemySpaceShips.Remove(ship);
                     return scoreCount;
                 }
             }
