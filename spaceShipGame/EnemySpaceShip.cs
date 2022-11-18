@@ -85,11 +85,11 @@ namespace spaceShipGame
                         maxSpaceTrailing = 1;
                     }
                     var newPosTrailing = rand.Next(1, maxSpaceTrailing);
-                    if (maxSpace < 6)
+                    if (maxSpace < 5)
                     {
-                        maxSpace = 6;
+                        maxSpace = 5;
                     }
-                    var newPosFirst = rand.Next(6, maxSpace);
+                    var newPosFirst = rand.Next(5, maxSpace);
 
                     if (totalShipSpacing > (52 - (enemySpaceShips.Count * 2)))
                     {
@@ -122,6 +122,14 @@ namespace spaceShipGame
             foreach (var enemyShip in enemySpaceShips)
             {
                 enemyPosX = string.Empty;
+                if (enemySpaceShips.First().posX < 5)
+                {
+                    enemyShip.posX = 5;
+                }
+                else
+                {
+                    enemyShip.posX = enemyShip.posX;
+                }
                 for (int i = 0; i <= enemyShip.posX; i++)
                 {
                     enemyPosX += "  ";

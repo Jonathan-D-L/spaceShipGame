@@ -99,6 +99,7 @@ namespace spaceShipGame
                             AnsiConsole.Write(spaceShip);
                             shipPosY += "\r\n\r\n";
                             shotPosY = shotPosY.Remove(shotPosY.Length - 4);
+                            shotPosX = moveX;
                         }
                         catch
                         {
